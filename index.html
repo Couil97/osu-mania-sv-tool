@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <script src="script.js"></script>
+
+  <div class="container" style="width:75%">
+    <div class="row">
+      <div class="col card m-2">
+        <div class="card-body">
+          <h5 class="text-center card-title">Teleport SV</h5>
+          <h6 id="test" class="text-center card-subtitle mb-2 text-muted">Teleports notes to its set location</h6>
+          <p class="card-text">
+          <div class="row">
+            <div class="col col-form-label col-form-label-sm">
+              <input id="tp_song_bpm" type="text" class="form-control form-control-sm" placeholder="Song BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm">
+              <input id="tp_current_bpm" type="text" class="form-control form-control-sm" placeholder="Current BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm" Style="max-width: 4.2rem;">
+              <input id="tp_multi" type="text" class="form-control form-control-sm" placeholder="1.0x">
+            </div>
+          </div>
+
+          <p>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Start Time</span>
+            <input id="tp_start" type="text" class="form-control">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">End Time</span>
+            <input id="tp_end" type="text" class="form-control">
+          </div>
+          <div class="text-left">
+            <input class="text-left form-check-input" type="checkbox" value="" id="tp_reverse">
+            <label class="text-left form-check-label">
+              Reverse
+            </label>
+          </div>
+
+          </p>
+
+          <div class="row border-top">
+            <h7 class="text-center card-subtitle mt-2 mb-2 text-alert">Please input SV boundries:</h7>
+            <div class="col">
+              <label for="tp_sv_min_range" class="form-label">Lower Boundry</label>
+              <input id="tp_sv_min_range" min="0.01" max="0.99" oninput="this.nextElementSibling.value = this.value"
+                step="0.01" type="range" class="form-range">
+              <input class="form-control" id="tp_sv_min_text" min="0.01" max="0.99"
+                oninput="this.previousElementSibling.value = this.value" type="text"></input>
+            </div>
+            <div class="col">
+              <label for="tp_sv_max_range" class="form-label">Upper Boundry</label>
+              <input id="tp_sv_max_range" min="1.01" max="10" oninput="this.nextElementSibling.value = this.value"
+                step="0.01" type="range" class="form-range">
+              <input class="form-control" id="tp_sv_max_text" min="1.01" max="10"
+                oninput="this.previousElementSibling.value = this.value" type="text"></input>
+            </div>
+            </p>
+            <button id="tp_submit" onclick="calculateTP()" type="button" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="col card m-2">
+        <div class="card-body">
+          <h5 class="text-center card-title">Exponential SV</h5>
+          <h6 class="text-center card-subtitle mb-2 text-muted">Gradually speeds up notes to its final destination</h6>
+          <p class="card-text">
+          <div class="row">
+            <div class="col col-form-label col-form-label-sm">
+              <input id="exp_song_bpm" type="text" class="form-control form-control-sm" placeholder="Song BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm">
+              <input id="exp_current_bpm" type="text" class="form-control form-control-sm" placeholder="Current BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm" Style="max-width: 4.2rem;">
+              <input id="exp_multi" type="text" class="form-control form-control-sm"
+                oninput="sliderSize(0.01,10,'exp_')" placeholder="1.0x">
+            </div>
+          </div>
+
+          <p>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Start Time</span>
+            <input id="exp_start" type="text" class="form-control">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">End Time</span>
+            <input id="exp_end" type="text" class="form-control">
+          </div>
+          <div class="text-left">
+            <input class="text-left form-check-input" type="checkbox" value="" id="exp_reverse">
+            <label class="text-left form-check-label">
+              Reverse
+            </label>
+          </div>
+
+          </p>
+
+          <div class="row border-top">
+            <h7 class="text-center card-subtitle mt-2 mb-2 text-alert">Please input upper or lower limit:</h7>
+            <div class="col">
+              <label for="exp_limit" class="form-label">SV Limit</label>
+              <input id="exp_limit" min="0.01" max="5.62" oninput="this.nextElementSibling.value = this.value"
+                step="0.01" type="range" class="form-range">
+              <input class="form-control" id="exp_limit_text" oninput="this.previousElementSibling.value = this.value"
+                type="text"></input>
+            </div>
+            </p>
+            <button id="exp_submit" onclick="calculateEXP()" type="button" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row border-top">
+      <div class="col card m-2">
+        <div class="card-body">
+          <h5 class="text-center card-title">Linear SV</h5>
+          <h6 id="test" class="text-center card-subtitle mb-2 text-muted">Constant increase or decrease of SV over given
+            time</h6>
+          <p class="card-text">
+          <div class="row">
+            <div class="col col-form-label col-form-label-sm">
+              <input id="lin_song_bpm" type="text" class="form-control form-control-sm" placeholder="Song BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm">
+              <input id="lin_current_bpm" type="text" class="form-control form-control-sm" placeholder="Current BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm" Style="max-width: 4.2rem;">
+              <input id="lin_multi" type="text" class="form-control form-control-sm" oninput="sliderSize(0.01,2,'lin_')" placeholder="1.0x">
+            </div>
+          </div>
+
+          <p>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Start Time</span>
+            <input id="lin_start" type="text" class="form-control">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">End Time</span>
+            <input id="lin_end" type="text" class="form-control">
+          </div>
+          <div class="text-left">
+            <input class="text-left form-check-input" type="checkbox" value="" id="lin_reverse">
+            <label class="text-left form-check-label">
+              Reverse
+            </label>
+          </div>
+
+          </p>
+
+          <div class="row border-top">
+            <h7 class="text-center card-subtitle mt-2 mb-2 text-alert">Please input upper or lower limit:</h7>
+            <div class="col">
+              <label for="lin_limit" class="form-label">SV Limit</label>
+              <input id="lin_limit" min="0.01" max="1.99" oninput="this.nextElementSibling.value = this.value"
+                step="0.01" type="range" class="form-range">
+              <input class="form-control" id="lin_limit_text" oninput="this.previousElementSibling.value = this.value"
+                type="text"></input>
+            </div>
+            </p>
+            <button id="lin_submit" onclick="calculateLIN()" type="button" class="btn btn-primary">Submit</button>
+          </div>
+          </p>
+        </div>
+      </div>
+      <div class="col card m-2">
+        <div class="card-body">
+          <h5 class="text-center card-title">Stutter SV</h5>
+          <h6 id="test" class="text-center card-subtitle mb-2 text-muted">Rapidly stutters notes over a set amount of
+            time</h6>
+          <p class="card-text">
+          <div class="row">
+            <div class="col col-form-label col-form-label-sm">
+              <input id="stu_song_bpm" type="text" class="form-control form-control-sm" placeholder="Song BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm">
+              <input id="stu_current_bpm" type="text" class="form-control form-control-sm" placeholder="Current BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm" Style="max-width: 4.2rem;">
+              <input id="stu_multi" type="text" class="form-control form-control-sm" placeholder="1.0x">
+            </div>
+          </div>
+
+          <p>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Start Time</span>
+            <input id="stu_start" type="text" class="form-control">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">End Time</span>
+            <input id="stu_end" type="text" class="form-control">
+          </div>
+          <div class="text-left">
+            <input class="text-left form-check-input" type="checkbox" value="" id="stu_reverse">
+            <label class="text-left form-check-label">
+              Reverse
+            </label>
+          </div>
+
+          </p>
+
+          <div class="row border-top">
+            <h7 class="text-center card-subtitle mt-2 mb-2 text-alert">Please input intensity and frequency of stutter:
+            </h7>
+            <div class="col-8">
+              <label for="stu_intensity" class="form-label">Stutter Intensity</label>
+              <input id="stu_intensity" min="1.01" max="10" oninput="this.nextElementSibling.value = this.value"
+                step="0.01" type="range" class="form-range">
+              <input class="form-control" id="stu_intensity_text"
+                oninput="this.previousElementSibling.value = this.value" type="text"></input>
+            </div>
+            <div class="d-flex flex-column col-4">
+              <label for="stu_frequency" class="mt-auto form-label">Frequency</label>
+              <select id="stu_frequency" class="form-select">
+                <option value="4" selected>1/4</option>
+                <option value="8">1/8</option>
+                <option value="16">1/16</option>
+                <option value="32">1/32</option>
+                <option value="64">1/64</option>
+              </select>
+            </div>
+            </p>
+            <button id="stu_submit" onclick="calculateSTU()" type="button" class="btn btn-primary">Submit</button>
+          </div>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row border-top">
+      <div class="col card m-2">
+        <div class="card-body">
+          <h5 class="text-center card-title">BPM Stop</h5>
+          <h6 id="test" class="text-center card-subtitle mb-2 text-muted">Instantly teleport to end position without movement</h6>
+          <p class="card-text">
+          <div class="row">
+            <div class="col col-form-label col-form-label-sm">
+              <input id="stop_song_bpm" type="text" class="form-control form-control-sm" placeholder="Song BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm">
+              <input id="stop_current_bpm" type="text" class="form-control form-control-sm" placeholder="Current BPM">
+            </div>
+            <div class="col col-form-label col-form-label-sm" Style="max-width: 4.2rem;">
+              <input id="stop_multi" type="text" class="form-control form-control-sm" placeholder="1.0x">
+            </div>
+          </div>
+
+          <p>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">Start Time</span>
+            <input id="stop_start" type="text" class="form-control">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">End Time</span>
+            <input id="stop_end" type="text" class="form-control">
+          </div>
+          <div class="text-left">
+            <input class="text-left form-check-input" type="checkbox" value="" id="stop_reverse">
+            <label class="text-left form-check-label">
+              Reverse
+            </label>
+          </div>
+          </p>
+          <div class="row">
+            <button id="stop_submit" onclick="calculateSTOP()" type="button" class="btn btn-primary">Submit</button>
+          </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+</body>
+
+</html>
